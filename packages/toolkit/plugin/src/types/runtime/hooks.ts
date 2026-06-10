@@ -17,6 +17,20 @@ export type OnBeforeRenderFn<RuntimeContext> = (
   interrupt: (info: any) => any,
 ) => Promise<any> | any;
 
+export type HydrationLifecycleEvent<RuntimeContext> = {
+  type: 'start' | 'success' | 'fallback' | 'error';
+  context: RuntimeContext;
+  renderLevel: unknown;
+  renderMode: string;
+  reason?: string;
+  root?: unknown;
+  error?: unknown;
+};
+
+export type OnHydrationFn<RuntimeContext> = (
+  event: HydrationLifecycleEvent<RuntimeContext>,
+) => void;
+
 export type ExtendStringSSRCollectorsFn<RuntimeContext> = (
   context: RuntimeContext,
 ) => Collector;
@@ -52,6 +66,7 @@ export type ConfigFn<RuntimeConfig> = () => RuntimeConfig;
 
 export type Hooks<RuntimeConfig, RuntimeContext> = {
   onBeforeRender: AsyncInterruptHook<OnBeforeRenderFn<RuntimeContext>>;
+  onHydration: SyncHook<OnHydrationFn<RuntimeContext>>;
   wrapRoot: SyncHook<WrapRootFn>;
   pickContext: SyncHook<PickContextFn<RuntimeContext>>;
   config: CollectSyncHook<ConfigFn<RuntimeConfig>>;

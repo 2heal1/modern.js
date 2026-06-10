@@ -111,7 +111,14 @@ export async function render(
 
     // we should hydateRoot only when ssr
     if (window._SSR_DATA) {
-      return hydrateRoot(App, context, ModernRender, ModernHydrate);
+      const internalRuntimeContext = getGlobalInternalRuntimeContext();
+      const hooks = internalRuntimeContext!.hooks;
+      return hydrateRoot(App, context, ModernRender, ModernHydrate, event => {
+        hooks.onHydration.call({
+          ...event,
+          context,
+        });
+      });
     }
     return ModernRender(wrapRuntimeContextProvider(App, context));
   }
