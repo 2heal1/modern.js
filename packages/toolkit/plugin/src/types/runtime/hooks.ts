@@ -18,13 +18,14 @@ export type OnBeforeRenderFn<RuntimeContext> = (
 ) => Promise<any> | any;
 
 export type HydrationLifecycleEvent<RuntimeContext> = {
-  type: 'start' | 'success' | 'fallback' | 'error';
+  type: 'start' | 'success' | 'fallback' | 'error' | 'recoverable-error';
   context: RuntimeContext;
   renderLevel: unknown;
   renderMode: string;
   reason?: string;
   root?: unknown;
   error?: unknown;
+  errorInfo?: unknown;
 };
 
 export type OnHydrationFn<RuntimeContext> = (

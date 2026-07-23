@@ -3,6 +3,6 @@
 '@modern-js/plugin': minor
 ---
 
-feat: add runtime hooks for hydration, router state, route loader, and route component lifecycle
+feat: add runtime hooks for hydration, router state, route loader, and route component lifecycle, and support globally injected runtime plugins
 
-feat: 新增 hydration、router state、route loader 和 route component lifecycle 运行时 hooks
+feat: 新增 hydration、router state、route loader 和 route component lifecycle 运行时 hooks，并支持全局注入 runtime plugin

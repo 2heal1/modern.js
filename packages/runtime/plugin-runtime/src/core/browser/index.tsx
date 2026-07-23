@@ -5,7 +5,7 @@ import { getGlobalInternalRuntimeContext } from '../context';
 import { type TRuntimeContext, getInitialContext } from '../context/runtime';
 import { wrapRuntimeContextProvider } from '../react/wrapper';
 import type { SSRContainer } from '../types';
-import { hydrateRoot } from './hydrate';
+import { type ModernHydrateOptions, hydrateRoot } from './hydrate';
 
 const IS_REACT18 = process.env.IS_REACT18 === 'true';
 
@@ -103,10 +103,10 @@ export async function render(
 
     async function ModernHydrate(
       App: React.ReactElement,
-      callback?: () => void,
+      options?: ModernHydrateOptions,
     ) {
       const hydrateFunc = IS_REACT18 ? hydrateWithReact18 : hydrateWithReact17;
-      return hydrateFunc(App, rootElement, callback);
+      return hydrateFunc(App, rootElement, options);
     }
 
     // we should hydateRoot only when ssr
@@ -149,10 +149,12 @@ export async function renderWithReact17(
 export async function hydrateWithReact18(
   App: React.ReactElement,
   rootElement: HTMLElement,
+  options?: ModernHydrateOptions,
 ) {
   const ReactDOM = await import('react-dom/client');
   const root = ReactDOM.hydrateRoot(rootElement, App, {
     identifierPrefix: SSR_HYDRATION_ID_PREFIX,
+    onRecoverableError: options?.onRecoverableError,
   });
   return root;
 }
@@ -160,9 +162,9 @@ export async function hydrateWithReact18(
 export async function hydrateWithReact17(
   App: React.ReactElement,
   rootElement: HTMLElement,
-  callback?: () => void,
+  options?: ModernHydrateOptions,
 ) {
   const ReactDOM: any = await import('react-dom');
-  const root = ReactDOM.hydrate(App, rootElement, callback);
+  const root = ReactDOM.hydrate(App, rootElement, options?.callback);
   return root as any;
 }

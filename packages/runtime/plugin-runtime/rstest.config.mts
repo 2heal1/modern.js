@@ -23,6 +23,7 @@ export default {
       name: 'plugin-runtime-node',
       testEnvironment: 'node',
       exclude: [
+        'tests/core/globalRuntimePlugin.test.ts',
         'tests/router/lifecycleHooks.test.tsx',
         'tests/router/prefetch.test.tsx',
       ],
@@ -50,6 +51,7 @@ export default {
       name: 'plugin-runtime-client',
       testEnvironment: 'happy-dom',
       include: [
+        'tests/core/globalRuntimePlugin.test.ts',
         'tests/router/lifecycleHooks.test.tsx',
         'tests/router/prefetch.test.tsx',
       ],

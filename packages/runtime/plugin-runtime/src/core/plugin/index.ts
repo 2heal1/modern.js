@@ -10,6 +10,28 @@ import type { RuntimeConfig, RuntimeExtends, RuntimePlugin } from './types';
 
 export type { RuntimePlugin };
 
+declare global {
+  interface Window {
+    /**
+     * Runtime plugins injected before the application entry runs.
+     */
+    __MODERN_RUNTIME_PLUGINS__?: RuntimePlugin | RuntimePlugin[];
+  }
+}
+
+const getGlobalRuntimePlugins = (): RuntimePlugin[] => {
+  if (typeof window === 'undefined') {
+    return [];
+  }
+
+  const injectedPlugin = window.__MODERN_RUNTIME_PLUGINS__;
+  if (!injectedPlugin) {
+    return [];
+  }
+
+  return Array.isArray(injectedPlugin) ? injectedPlugin : [injectedPlugin];
+};
+
 export function registerPlugin(
   internalPlugins: RuntimePlugin[],
   runtimeConfig?: RuntimeConfig,
@@ -20,6 +42,7 @@ export function registerPlugin(
       compatPlugin(),
       requestContextPlugin(),
       ...internalPlugins,
+      ...getGlobalRuntimePlugins(),
       ...plugins,
     ] as Plugin[],
     config: runtimeConfig || {},

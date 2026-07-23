@@ -10,13 +10,19 @@ import { WithCallback } from './withCallback';
 export const isReact18 = () => process.env.IS_REACT18 === 'true';
 
 export type HydrationReporter = (event: {
-  type: 'start' | 'success' | 'fallback' | 'error';
+  type: 'start' | 'success' | 'fallback' | 'error' | 'recoverable-error';
   renderLevel: RenderLevel;
   renderMode: string;
   reason?: string;
   root?: HTMLElement | Root;
   error?: unknown;
+  errorInfo?: unknown;
 }) => void;
+
+export interface ModernHydrateOptions {
+  callback?: () => void;
+  onRecoverableError?: (error: unknown, errorInfo?: unknown) => void;
+}
 
 export function hydrateRoot(
   App: React.ReactElement,
@@ -24,7 +30,7 @@ export function hydrateRoot(
   ModernRender: (App: React.ReactElement) => Promise<HTMLElement | Root>,
   ModernHydrate: (
     App: React.ReactElement,
-    callback?: () => void,
+    options?: ModernHydrateOptions,
   ) => Promise<HTMLElement | Root>,
   reportHydration?: HydrationReporter,
 ) {
@@ -89,6 +95,16 @@ export function hydrateRoot(
     delete hydrateContext._hydration;
     reportSuccess();
   };
+  const onRecoverableError = (error: unknown, errorInfo?: unknown) => {
+    report({
+      type: 'recoverable-error',
+      renderLevel,
+      renderMode,
+      reason: 'recoverable-hydration-error',
+      error,
+      errorInfo,
+    });
+  };
 
   report({
     type: 'start',
@@ -108,6 +124,9 @@ export function hydrateRoot(
       );
       return ModernHydrate(
         wrapRuntimeContextProvider(<SSRApp />, hydrateContext),
+        {
+          onRecoverableError,
+        },
       )
         .then(root => {
           reportSuccess(root);
@@ -149,6 +168,9 @@ export function hydrateRoot(
             );
             ModernHydrate(
               wrapRuntimeContextProvider(<SSRApp />, hydrateContext),
+              {
+                onRecoverableError,
+              },
             )
               .then(root => {
                 reportSuccess(root);
@@ -166,10 +188,9 @@ export function hydrateRoot(
           });
         } else {
           loadableReady(() => {
-            ModernHydrate(
-              wrapRuntimeContextProvider(App, hydrateContext),
+            ModernHydrate(wrapRuntimeContextProvider(App, hydrateContext), {
               callback,
-            )
+            })
               .then(root => {
                 reportSuccess(root);
                 resolve(root);
