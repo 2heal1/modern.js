@@ -1,0 +1,33 @@
+.changeset/openruntime-router-hooks.md
+  s_a3f40594fb65d6::t_7e4d5cf386fe54 6,8
+packages/runtime/plugin-runtime/rstest.config.mts
+  s_a3f40594fb65d6::t_8f18572dac88af 26,54
+packages/runtime/plugin-runtime/src/core/browser/hydrate.tsx
+  s_a3f40594fb65d6::t_5ca39f0a669641 13,19,22-26,33,98-107,127-129,171-173,191,193
+packages/runtime/plugin-runtime/src/core/browser/index.tsx
+  s_a3f40594fb65d6::t_2a67907cc4c2aa 8,106,109,152,157,165,168
+packages/runtime/plugin-runtime/src/core/plugin/index.ts
+  s_a3f40594fb65d6::t_79610f4f80bfc7 13-34,45
+packages/runtime/plugin-runtime/tests/core/globalRuntimePlugin.test.ts
+  s_a3f40594fb65d6::t_da88ec411eaee5 1-75
+tests/integration/runtime-plugin/tests/index.test.ts
+  s_a3f40594fb65d6::t_42ed4ee99e0b73 21-30,38-42
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.6.10",
+  "base_commit_sha": "ec0cd57b211ff0ca2b1b6db0c233107794e93b80",
+  "prompts": {},
+  "sessions": {
+    "s_a3f40594fb65d6": {
+      "agent_id": {
+        "tool": "codex",
+        "id": "019f8ec2-2626-7bc0-8890-84f3a42bb37d",
+        "model": "unknown"
+      },
+      "human_author": "zhanghang.heal <zhanghang.heal@bytedance.com>"
+    }
+  },
+  "attestation_metadata": {},
+  "remote_transcripts": {}
+}
